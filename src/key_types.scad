@@ -1,6 +1,4 @@
 include <functions.scad>
-use <key_sizes.scad>
-use <key_transformations.scad>
 
 module spacebar() {
   $inverted_dish = $dish_type != "disable";

@@ -17,13 +17,14 @@ use <libraries/scad-utils/lists.scad>
 use <libraries/scad-utils/shapes.scad>
 use <libraries/skin.scad>
 
-// key shape including dish. used as the outside and inside shape in hollow_key(). allows for itself to be shrunk in depth and width / height
+// key shape including dish. used as the ouside and inside shape in hollow_key(). allows for itself to be shrunk in depth and width / height
 module shape(thickness_difference, depth_difference=0){
   dished(depth_difference, $inverted_dish) {
     color($primary_color) shape_hull(thickness_difference, depth_difference, $inverted_dish ? 200 : 0);
   }
 }
 
+// Not currently used due to CGAL errors. Rounds the shape via minkowski
 module rounded_shape() {
   color($primary_color) minkowski(){
     // half minkowski in the z direction
@@ -46,13 +47,12 @@ module minkowski_object() {
   }
 }
 
-module envelope(depth_difference=0, extra_floor_depth=0) {
-  size = 1.5;
-  
+module envelope(depth_difference=0) {
+  s = 1.5;
   hull(){
-    translate([0,0,extra_floor_depth]) cube([key_width_at_progress(extra_floor_depth / $total_depth) * size, key_height_at_progress(extra_floor_depth / $total_depth) * size, 0.01], center = true);
+    cube([total_key_width() * s, total_key_height() * s, 0.01], center = true);
     top_placement(SMALLEST_POSSIBLE + depth_difference){
-      cube([top_total_key_width() * size, top_total_key_height() * size, 0.01], center = true);
+      cube([top_total_key_width() * s, top_total_key_height() * s, 0.01], center = true);
     }
   }
 }
@@ -65,12 +65,12 @@ module dished(depth_difference = 0, inverted = false) {
     children();
     difference(){
       union() {
-        // envelope is needed to "fill in" the rest of the keycap. intersections with small objects are much faster than differences with large objects
-        envelope(depth_difference, $stem_inset);
+        // envelope is needed to "fill in" the rest of the keycap
+        envelope(depth_difference);
         if (inverted) top_placement(depth_difference) color($secondary_color) _dish(inverted);
       }
       if (!inverted) top_placement(depth_difference) color($secondary_color) _dish(inverted);
-      // %top_placement(depth_difference) _dish();
+      /* %top_placement(depth_difference) _dish(); */
     }
   }
 }
@@ -80,7 +80,6 @@ module dished(depth_difference = 0, inverted = false) {
 module _dish(inverted=$inverted_dish) {
   translate([$dish_offset_x,0,0]) color($secondary_color) 
   dish(top_total_key_width() + $dish_overdraw_width, top_total_key_height() + $dish_overdraw_height, $dish_depth, inverted);
-  // %dish(top_total_key_width() + $dish_overdraw_width, top_total_key_height() + $dish_overdraw_height, $dish_depth, inverted);
 }
 
 // puts its children at each keystem position provided
@@ -114,9 +113,9 @@ module top_placement(depth_difference=0) {
   top_tilt_by_height = -$top_tilt / $key_height;
   top_tilt_y_by_length = $double_sculpted ? (-$top_tilt_y / $key_length) : 0;
 
-  // minkowski_height = $rounded_key ? $minkowski_radius : 0;
+  minkowski_height = $rounded_key ? $minkowski_radius : 0;
 
-  translate([$top_skew_x + $dish_skew_x, $top_skew + $dish_skew_y, $total_depth - depth_difference]){
+  translate([$top_skew_x + $dish_skew_x, $top_skew + $dish_skew_y, $total_depth - depth_difference + minkowski_height/2]){
     rotate([top_tilt_by_height, top_tilt_y_by_length,0]){
       children();
     }
@@ -242,12 +241,10 @@ module outer_total_shape(inset=false) {
 // takes all the bits and glues them together. requires configuration with special variables.
 module key(inset=false) {
   difference(){
-    outer_total_shape(inset) {
-      children();
-    };
+    outer_total_shape(inset);
 
     if ($inner_shape_type != "disable") {
-      translate([0,0,-SMALLEST_POSSIBLE]) { // avoids moire
+      translate([0,0,-SMALLEST_POSSIBLE]) {
         inner_total_shape();
       }
     }
@@ -257,12 +254,10 @@ module key(inset=false) {
     };
   }
 
-  // semi-hack to make sure negative inset stems don't poke through the top of the keycap
+  // if $stem_inset is less than zero, we add the
   if ($stem_inset < 0) {
-    dished(0, $inverted_dish) {
-      stems_and_stabilizers();
-    }
-  } 
+    stems_and_stabilizers();
+  }
 }
 
 // actual full key with space carved out and keystem/stabilizer connectors

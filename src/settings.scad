@@ -76,10 +76,8 @@ $rounded_cherry_stem_d = 5.5;
 // Inset stem requires support but is more accurate in some profiles
 // can be negative to make outset stems!
 $stem_inset = 0;
-// How many degrees to rotate the stems. useful for sideways keycaps
+// How many degrees to rotate the stems. useful for sideways keycaps, maybe
 $stem_rotation = 0;
-// How many degrees to rotate the keycap, but _not_ inside features (the stem). 
-$keycap_rotation = 0;
 
 /* [Shape] */
 
@@ -197,60 +195,14 @@ $warning_color = [1,0,0, 0.15];
 $minkowski_facets = 30;
 $shape_facets =30;
 
-
+// 3d surface settings
+// unused for now
+$3d_surface_size = 100;
+// resolution in each axis. 10 = 10 divisions per x/y = 100 points total
+$3d_surface_step = 10;
 
 // "flat" / "dished" / "disable"
 $inner_shape_type = "flat";
 
-// default side_sculpting function, linear
-$side_sculpting = function(progress) 0;
-$corner_sculpting = function(progress) 0;
-
-// you probably shouldn't touch this, it's internal to sculpted_square
-// modify side sculpting with the $side_sculpting function in the key profile files
-$more_side_sculpting_factor = 0;
-
-// 3d surface functions (still in beta)
-
-// 3d surface settings
-// unused for now
-$3d_surface_size = 1;
-// 3d surface point resolution. $3d_surface_size / $3d_surface_step = steps per x / y
-$3d_surface_step = 1/20;
-
-// monotonically increasing function that distributes the points of the surface mesh
-// only for polar_3d_surface right now
-// if it's linear it's a grid. sin(dim) * size concentrates detail around the edges
-sinusoidal_surface_distribution = function(dim,size) sin(dim) * size;
-linear_surface_distribution = function(dim,size) dim;
-
-$surface_distribution_function = sinusoidal_surface_distribution;
-
-// the function that actually determines what the surface is.
-// feel free to override, the last one wins
-
-// debug
-// $surface_function = function(x,y) 1;
-cylindrical_surface = function(x,y) (sin(acos(x/$3d_surface_size)));
-spherical_surface = function(x,y) (1 - (x/$3d_surface_size)^2)^0.5 * (1 - (y/$3d_surface_size)^2)^0.5;
-// looks a lot like mt3
-quartic_surface = function(x,y) (1 - (x/$3d_surface_size)^4)^0.5 * (1 - (y/$3d_surface_size)^4)^0.5;
-ripple_surface = function(x,y) cos((x^2+y^2)^0.5 * 50)/4 + 0.75; 
-rosenbrocks_banana_surface = function(x,y) (pow(1-(x/$3d_surface_size))^2 + 100 * pow((y/$3d_surface_size)-(x/$3d_surface_size)^2)^2)/200 + 0.1;
-spike_surface = function(x,y) 1/(((x/$3d_surface_size)^2+(y/$3d_surface_size)^2)^0.5) + .01;
-random_surface = function(x,y) sin(rands(0,90,1,x+y)[0]);
-bumps_surface = function(x,y) sin(20*x)*cos(20*y)/3+1;
-
-$surface_function = bumps_surface; // bumps_surface;
-
-// can be used to smooth the corners of the 3d surface function, to make the dishes add / subtract less height. can really do anything it's just multiplying, but that's what I use it for
-$corner_smoothing_surface_function = function(x,y) 1;
-// $corner_smoothing_surface_function = function(x,y) (1 - pow(abs(x), 5)/$3d_surface_size) * (1 - pow(abs(y),5)/$3d_surface_size);
-
-// ripples
-/* 
-// Rosenbrock's banana
-/* $
-// y=x revolved around the y axis
-/* $surface_function =  */
-/* $surface_function =  */
+// rotate legends
+$legend_rotation=0;

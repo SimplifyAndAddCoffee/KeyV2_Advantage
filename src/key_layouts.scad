@@ -17,4 +17,6 @@ include <layouts/gherkin/gherkin_bump.scad>
 include <layouts/dactyl_manuform/4x6.scad>
 include <layouts/dactyl_manuform/4x6_legends.scad>
 
+include <layouts/advantage_dactyl/advantage_maltron.scad>
+
 include <layouts/plate.scad>

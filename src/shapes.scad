@@ -28,8 +28,6 @@ module key_shape(size, delta, progress = 0) {
     regular_polygon_shape(size, delta, progress);
   } else if ($key_shape_type == "octagon") {
     regular_polygon_shape(size, delta, progress, sides=8);
-  } else if ($key_shape_type == "circular") {
-    regular_polygon_shape(size, delta, progress, sides=36);
   } else {
     echo("Warning: unsupported $key_shape_type");
   }

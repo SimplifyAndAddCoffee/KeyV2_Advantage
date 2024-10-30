@@ -1,6 +1,4 @@
-use <../functions.scad>
-include <../settings.scad>
-
+// my own measurements
 module hipro_row(row=3, column=0) {
   $key_shape_type = "sculpted_square";
 
@@ -9,18 +7,13 @@ module hipro_row(row=3, column=0) {
 
   $width_difference = ($bottom_key_width - 12.3);
   $height_difference = ($bottom_key_height - 12.65);
-  $dish_type = "squared scoop";
+  $dish_type = "spherical";
   $dish_depth = 0.75;
   $dish_skew_x = 0;
   $dish_skew_y = 0;
   $top_skew = 0;
   $height_slices = 10;
-
   $corner_radius = 1;
-  $more_side_sculpting_factor = 0.4;
-
-  $side_sculpting = function(progress) (1 - progress) * 4.5;
-  $corner_sculpting = function(progress) pow(progress, 2);
 
   $top_tilt_y = side_tilt(column);
   extra_height =  $double_sculpted ? extra_side_tilt_height(column) : 0;
