@@ -1,8 +1,25 @@
-# Parametric Mechanical Keycap Library
+# Parametric Mechanical Keycap Library -- Now with MALTRON for Kinesis Advantage!
 
 ![a slightly askew welcome picture](assets/welcome.png)
 
 This library is a keycap and keyset construction library for mechanical keyboards, written in openSCAD.
+This fork is based off an older branch and will likely not work with the current main fork by rsheldiii.
+
+Changes unique to this fork:
+
+* Extensively reworked layouts to take multiple parameters for different types of keys and legends in a single layout.
+* Added DSX and Tai-Hao key profiles for use with Kinesis Advantage.
+
+To see all of the new layout features in use, and to generate a Kinesis Advantage keycap set (in Malt), see:
+```
+/examples/advantage_maltron_layout.scad
+```
+For generating single replacement keycaps based on this layout and settings, see:
+```
+/examples/key_generator.scad
+```
+
+Remaining intructions from the original readme follows:
 
 Relevant links:
 * Thingiverse: https://www.thingiverse.com/thing:2783650
