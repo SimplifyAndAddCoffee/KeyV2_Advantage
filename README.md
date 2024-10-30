@@ -1,6 +1,6 @@
 # Parametric Mechanical Keycap Library -- Now with MALTRON for Kinesis Advantage!
 
-![a slightly askew welcome picture](assets/welcome.png)
+![a slightly askew welcome picture](assets/maltron.png)
 
 This library is a keycap and keyset construction library for mechanical keyboards, written in openSCAD.
 This fork is based off an older branch and will likely not work with the current main fork by rsheldiii.
